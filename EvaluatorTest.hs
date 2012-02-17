@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module EvaluatorTest where
 import qualified Data.HashMap.Strict as H
 import Evaluator 
@@ -14,6 +15,7 @@ import Control.Monad.Reader
 import Control.Monad.Writer
 import Data.Either
 import System.Exit
+import Control.Applicative hiding (empty)
 
 isRight (Right x) = True
 isRight _ = False
@@ -32,11 +34,14 @@ run_parser input = runParser parse_command () "" input
 --run_evaluator :: AppReadonly -> AppState -> Input -> IO ((Output, AppState), ())
 run_evaluator x y input = run_context y x (runApp $ eval input)
 
-read_only = AppReadonly [] H.empty
+read_only = AppReadonly "state.js"
+
+load' read_only state = snd <$> run_context state read_only (runApp load)
 
 main = do
     
-    let app_state = AppState empty
+    let app_state = AppState empty H.empty H.empty
+    !app_state <- load' read_only app_state
     app_state_ref <- newIORef app_state
     
     loop app_state_ref
@@ -46,9 +51,6 @@ abort_if line str = do
         then exitSuccess
         else return ()
         
---todo
---make the other evaluator
---make the serialization
 
 loop app_state_ref = do
     state <- readIORef app_state_ref
@@ -66,7 +68,6 @@ loop app_state_ref = do
                 ((output, ()), new_state) <- run_evaluator read_only state input
     
                 print output
-                print new_state
     
                 writeIORef app_state_ref new_state
                 

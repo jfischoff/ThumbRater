@@ -7,11 +7,28 @@ import Text.Parsec
 import Text.Parsec.Language
 import Text.Parsec.Token
 import qualified Data.ByteString.Char8 as BSC
+import Control.Monad
+import Control.Applicative hiding ((<|>), many, optional)
+
+parse_commands = (do {optional spaces; parse_command}) `sepBy` newline
 
 parse_command =  try parse_login
              <|> try parse_rate
              <|> try parse_upload
-             <|> parse_get_images
+             <|> try parse_get_images
+             <|> try parse_print
+             
+parse_print = do
+             string "print" 
+             spaces
+             Print <$> parse_print_option
+             
+parse_print_option = try (parse_name "state" Commands.State)
+                  <|> try (parse_name "leaderboards" Leaderboards)
+                   
+parse_name name output = do
+    string name
+    return output
              
 parse_login = do 
     string "login"
@@ -79,7 +96,7 @@ parse_user_command p = do
     return $ UserInput (fromIntegral user_id) value
     
 parse_rating =  try parse_thumbs_up
-            <|> try parse_thumbs_down
+            <|>     parse_thumbs_down
               
 parse_thumbs_up = do
     choice [string "ThumbsUp", string "thumbs_up", string "thumbs up"]
