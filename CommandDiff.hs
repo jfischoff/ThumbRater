@@ -15,5 +15,7 @@ module CommandDiff where
 import Data.Generic.Diff
 import Commands
 import CommandDiffTH
+import Types
 
 $(make_family_gadt ''Output)
+

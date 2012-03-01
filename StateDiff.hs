@@ -31,7 +31,7 @@ type ContextAdj   = (EdgeType, Node)
 type AdjList      = [ContextAdj]
 type GraphContext = Context NodeType EdgeType
 type ContextList  = [GraphContext]
-type RatingList   = [Rating]
+--type RatingList   = [Rating]
 
 
 type EntityIdList   = [EntityId]
@@ -72,17 +72,17 @@ data AppStateTupleFam :: * -> * -> * where
     NilContextList'        :: AppStateTupleFam ContextList Nil
     ContextList'           :: AppStateTupleFam ContextList (Cons GraphContext (Cons ContextList Nil))
     FBIdPair'              :: AppStateTupleFam FBIdPair (Cons String (Cons Int Nil))
-    NilFBIdPairList'        :: AppStateTupleFam FBIdPairList Nil
+    NilFBIdPairList'       :: AppStateTupleFam FBIdPairList Nil
     FBIdPairList'          :: AppStateTupleFam FBIdPairList (Cons FBIdPair (Cons FBIdPairList Nil))
     NilEntityIdList'       :: AppStateTupleFam EntityIdList Nil
     EntityIdList'          :: AppStateTupleFam EntityIdList (Cons EntityId (Cons EntityIdList Nil))
     DateEntityListPair'    :: AppStateTupleFam DateEntityListPair (Cons Date (Cons EntityIdList Nil))
-    NilDateEntityListList'  :: AppStateTupleFam DateEntityListList Nil
+    NilDateEntityListList' :: AppStateTupleFam DateEntityListList Nil
     DateEntityListList'    :: AppStateTupleFam DateEntityListList (Cons DateEntityListPair (Cons DateEntityListList Nil))
     ImagesTypePair'        :: AppStateTupleFam ImagesTypePair (Cons GetImagesType (Cons DateEntityListList Nil))
-    NilImagesTypePairList'  :: AppStateTupleFam ImagesTypePairList Nil
-    ImagesTypePairList'     :: AppStateTupleFam ImagesTypePairList (Cons ImagesTypePair (Cons ImagesTypePairList Nil))
-    AppStateTuple'          :: AppStateTupleFam AppStateTuple (Cons ContextList (Cons ImagesTypePairList (Cons FBIdPairList (Cons Int Nil))))
+    NilImagesTypePairList' :: AppStateTupleFam ImagesTypePairList Nil
+    ImagesTypePairList'    :: AppStateTupleFam ImagesTypePairList (Cons ImagesTypePair (Cons ImagesTypePairList Nil))
+    AppStateTuple'         :: AppStateTupleFam AppStateTuple (Cons ContextList (Cons ImagesTypePairList (Cons FBIdPairList (Cons Int Nil))))
     
 instance Family AppStateTupleFam where
     decEq (String' x) (String' y) | x == y = Just (Refl, Refl)

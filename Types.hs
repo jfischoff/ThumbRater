@@ -141,13 +141,14 @@ instance SEq      ImageNode where shallowEq  = shallowEqDef
 instance Build    ImageNode where build      = buildDef
 instance Children ImageNode where children   = childrenDef
 instance GDiff ImageNode
-    
+   
+type RatingList = [Rating] 
     
 data ImageInfo = ImageInfo 
     {
         image_info_type    :: String,
         image_info_uri     :: String,
-        image_info_ratings :: [Rating],
+        image_info_ratings :: RatingList,
         image_info_owner   :: EntityId
     }
         deriving(Show, Eq, Read, Ord, Generic, Data, Typeable)

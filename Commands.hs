@@ -123,17 +123,17 @@ data GetImagesInput = GetImagesInput
         get_images_input_type :: GetImagesType
     }
         deriving(Show, Eq, Read, Data, Typeable, Generic)
+
+type ImageEntityList = [ImageEntity]
         
 data GetImagesOutput = GetImagesOutput
     {
-        get_images_output_images :: [ImageEntity]
+        get_images_output_images :: ImageEntityList
     }
         deriving(Show, Eq, Read, Data, Typeable, Generic)
 data GetImagesError = GetImageError
     deriving(Show, Eq, Read, Data, Typeable, Generic)
 type GetImagesCommand = Command GetImagesInput GetImagesOutput GetImagesError
-
-
 
 data PrintOption = State
                  | Leaderboards

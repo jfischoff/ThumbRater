@@ -22,7 +22,6 @@ isRight _ = False
 
 fromRight (Right x) = x
 
-
 run_parser input = runParser parse_command () "" input
 
 --run_context' = undefined

@@ -24,14 +24,16 @@ type SuperStateType reader writer state err core output =
 newtype SuperStateT reader writer state err core output = SuperStateT {
     un_state :: SuperStateType reader writer state err core output}
     deriving(Monad, Trans.MonadIO, RWS.MonadRWS reader writer state, 
-             Reader.MonadReader reader, Writer.MonadWriter writer, State.MonadState state, Functor)
+             Reader.MonadReader reader, Writer.MonadWriter writer, 
+             State.MonadState state, Functor)
              
 runSuperState action = RWS.runRWST (Error.runErrorT (un_state action))
                     
 instance (Monad core, Error.Error err, RWS.Monoid writer) =>  
           Error.MonadError err (SuperStateT reader writer state err core) where
     throwError = SuperStateT . Error.ErrorT . return . Left 
-    action `catchError` handler = SuperStateT $ un_state action `Error.catchError` \e -> un_state (handler e)
+    action `catchError` handler = SuperStateT $ 
+        un_state action `Error.catchError` \e -> un_state (handler e)
     
 {-
 
